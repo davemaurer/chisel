@@ -36,12 +36,12 @@ class Chisel
 
 end
 
-document = '# My Life in Desserts
-
-## Chapter 1: The Beginning
-
-"You just *have* to try the cheesecake," he said. "Ever since it appeared in
-**Food & Wine** this place has been packed every night."'
+# document = '# My Life in Desserts
+#
+# Chapter 1: The Beginning
+#
+# "You just *have* to try the cheesecake," he said. "Ever since it appeared in
+# **Food & Wine** this place has been packed every night."'
 
 parser = Chisel.new(File.read('./workfiles/chisel.txt'))
 output = parser.document_splitter
