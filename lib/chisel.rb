@@ -5,36 +5,37 @@ require 'pry'
 
 class Chisel
 
-  def initialize(document)
-    @document = document
-    @parsed_document = []
-  end
-
-  def emphasizer
-    @document = @document.gsub!('&', '&amp;').split(/ /)
-    binding.pry
-    @document.map do |word|
-      word[0..1] = '<strong>' if word.delete("\n")[0..1] == '**'
-      word[-2..-1] = '</strong>' if word.delete("\n")[-2..-1] == '**'
-      word[0] = '<em>' if word.delete("\n")[0] == '*'
-      word[-1] = '</em>' if word.delete("\n")[-1] == '*'
-    end
-    @document.join(" ")
-  end
-
-  def document_splitter
-    emphasizer.split("\n\n").each do |string|
-      # return_count = @document.each {|chunk| chunk.count("\n")}
-      if string.start_with?("#")
-        @parsed_document << Header.new.header_replacer(string)
+  def emphasize(document)
+    # word.map do |word|
+    emphasized = document.gsub!('&', '&amp;').gsub!('**', '<strong>').gsub!('*', '<em>').split(/ /).map do |word|
+      if word.end_with?('<strong>')
+        word.chomp('<strong>') + '</strong>'
+      elsif word.end_with?('<em>')
+        word.chomp('<em>') + '</em>'
       else
-        @parsed_document << Paragrapher.new.paragraph_replacer(string)
+        word
       end
     end
-    @parsed_document.join
+    emphasized.join(" ")
+  end
+
+
+  def parse(document)
+    parsed_document = []
+    emphasize(document).split("\n\n").each do |string|
+      # return_count = @document.each {|chunk| chunk.count("\n")}
+      if string.start_with?("#")
+        parsed_document << Header.new.header_replacer(string)
+      else
+        parsed_document << Paragrapher.new.paragraph_replacer(string)
+      end
+    end
+    parsed_document.join
   end
 
 end
+
+
 
 # document = '# My Life in Desserts
 #
@@ -43,10 +44,7 @@ end
 # "You just *have* to try the cheesecake," he said. "Ever since it appeared in
 # **Food & Wine** this place has been packed every night."'
 
-parser = Chisel.new(File.read('./workfiles/chisel.txt'))
-output = parser.document_splitter
+parser = Chisel.new
+output = parser.parse(File.read('./workfiles/chisel.txt'))
 puts output
-handle = File.open('./workfiles/parsed.txt', 'w')
-handle.write(output)
-handle.close
 
