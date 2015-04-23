@@ -20,7 +20,7 @@ class Chisel
   def parse
     parsed_document = []
     split_text.each do |string|
-      unless string.start_with?("*", "#") || string[0].to_i > 0
+      unless string.start_with?("*", "#", "[") || string[0].to_i > 0
         parsed_document << Paragrapher.new.paragraph_replacer(string)
       end
       if string.start_with?("#")
@@ -29,6 +29,8 @@ class Chisel
         parsed_document << Lister.new.ul_replacer(string)
       elsif string[0].to_i > 0
         parsed_document << Lister.new.ol_replacer(string)
+      elsif string.start_with?("[")
+        parsed_document << Linker.new.link_replacer(string)
       end
     end
     parsed = parsed_document.join("\n")
@@ -41,6 +43,5 @@ input_file = File.read(ARGV[0])
 output_file = (ARGV[1])
 
 parser = Chisel.new(input_file, output_file)
-parsed = parser.parse
-File.write(output_file, parsed)
+File.write(output_file, parser.parse)
 end

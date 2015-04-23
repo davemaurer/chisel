@@ -16,13 +16,8 @@
 # gsub /<a [^h]*href=["']([^"']*)["'][^>]*>([^<]*)<\/a>/, "[\\2](\\1)
 
 class Linker
-  attr_reader :string
-
-  def initialize(string)
-    @string = string
-  end
-
-  def convert_link
-
+  def link_replacer(string)
+    parts = string.split(/\[|\]|\(|\)/).join(" ").split("  ")
+    "<p><a href=#{parts[1]}>#{parts[0].strip}</a></p>\n"
   end
 end
