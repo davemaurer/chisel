@@ -1,6 +1,6 @@
 require_relative "header"
 require_relative "paragrapher"
-require_relative "emphasis"
+require_relative "emphasizer"
 require 'pry'
 
 class Chisel
@@ -12,7 +12,7 @@ class Chisel
   end
 
   def emphasized_text
-    Emphasis.new(markdown_file).emphasize
+    Emphasizer.new(markdown_file).emphasize
   end
 
   def split_text
@@ -30,5 +30,4 @@ class Chisel
     end
     parsed_document.join
   end
-
 end

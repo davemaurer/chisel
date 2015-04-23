@@ -1,4 +1,4 @@
-class Emphasis
+class Emphasizer
   attr_reader :markdown_text
 
   def initialize(markdown_text)
@@ -24,6 +24,4 @@ class Emphasis
     end
     emphasized.join(" ")
   end
-
-
 end

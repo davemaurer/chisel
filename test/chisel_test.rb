@@ -1,11 +1,10 @@
 require 'minitest/autorun'
 require 'minitest/pride'
 require '../lib/chisel'
-require '../lib/emphasis'
 
 class ChiselTest < MiniTest::Test
-
   attr_reader :chisel
+
   def setup
     @chisel = Chisel.new('../workfiles/chisel.txt', '../workfiles/tester.txt')
   end
@@ -24,7 +23,7 @@ class ChiselTest < MiniTest::Test
   end
 
   def test_it_can_call_the_emphasis_class_methods
-    emph = Emphasis.new('../workfiles/tester.txt')
+    emph = Emphasizer.new('../workfiles/tester.txt')
     assert emph
   end
 
@@ -36,6 +35,18 @@ class ChiselTest < MiniTest::Test
   def test_it_parses_headers
     @chisel = Chisel.new("# This is\n\n#### a test.\n\n## To see")
     assert_equal "<h1> This is </h1>\n\n<h4> a test. </h4>\n\n<h2> To see </h2>\n\n", @chisel.parse
+  end
+
+  def test_it_parses_paragraphs
+    @chisel = Chisel.new("This is a paragraph")
+    assert_equal "<p>\nThis is a paragraph\n</p>\n", @chisel.parse
+  end
+
+  def test_it_parses_an_entire_document
+    correct_parse = File.read '../workfiles/parsed_file_example.txt'
+    @chisel.parse
+    result = File.read "../workfiles/parsed.txt"
+    assert_equal correct_parse, result
   end
 
 end
