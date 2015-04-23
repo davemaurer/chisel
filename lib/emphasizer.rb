@@ -1,15 +1,15 @@
 class Emphasizer
-  attr_reader :markdown_text
+  attr_reader :parsed
 
-  def initialize(markdown_text)
-    @markdown_text = markdown_text
+  def initialize(parsed)
+    @parsed = parsed
   end
 
   def substitute
-    markdown_text.gsub!('&', '&amp;') if markdown_text.include?('&')
-    markdown_text.gsub!('**', '<strong>') if markdown_text.include?('**')
-    markdown_text.gsub!('*', '<em>') if markdown_text.include?('*')
-    markdown_text
+    parsed.gsub!('&', '&amp;') if parsed.include?('&')
+    parsed.gsub!('**', '<strong>') if parsed.include?('**')
+    parsed.gsub!('*', '<em>') if parsed.include?('*')
+    parsed
   end
 
   def emphasize
